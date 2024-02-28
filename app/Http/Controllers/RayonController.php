@@ -12,7 +12,9 @@ class RayonController extends Controller
      */
     public function index()
     {
-        //
+        //$rayons = Rayon::latest()->paginate(5);
+
+        return view('rayons.index', compact('rayons'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -20,7 +22,7 @@ class RayonController extends Controller
      */
     public function create()
     {
-        //
+        return view('rayons.create');
     }
 
     /**
@@ -28,7 +30,13 @@ class RayonController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'rayon' => 'required',
+        ]);
+
+        Rayon::create($request->all());
+
+        return redirect()->route('rayons.index')->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
@@ -44,7 +52,7 @@ class RayonController extends Controller
      */
     public function edit(Rayon $rayon)
     {
-        //
+        return view('rayons.edit', compact('rayon'));
     }
 
     /**
@@ -52,7 +60,13 @@ class RayonController extends Controller
      */
     public function update(Request $request, Rayon $rayon)
     {
-        //
+        $request->validate([
+            'rayon' => 'required',
+        ]);
+
+        $rayon->update($request->all());
+
+        return redirect()->route('rayons.index')->with('success', 'Berhasil Update !');
     }
 
     /**
@@ -60,6 +74,8 @@ class RayonController extends Controller
      */
     public function destroy(Rayon $rayon)
     {
-        //
+        $rayon->delete();
+
+        return redirect()->route('rayons.index')->with('success', 'Berhasil Hapus !');
     }
 }

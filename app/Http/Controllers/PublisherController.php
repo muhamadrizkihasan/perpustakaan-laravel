@@ -12,7 +12,9 @@ class PublisherController extends Controller
      */
     public function index()
     {
-        //
+        $publishers = Publisher::latest()->paginate(5);
+
+        return view('publishers.index', compact('publishers'))->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -20,7 +22,7 @@ class PublisherController extends Controller
      */
     public function create()
     {
-        //
+        return view('publishers.create');
     }
 
     /**
@@ -28,7 +30,13 @@ class PublisherController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'penerbit' => 'required',
+        ]);
+
+        Publisher::create($request->all());
+
+        return redirect()->route('publishers.index')->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
@@ -44,7 +52,7 @@ class PublisherController extends Controller
      */
     public function edit(Publisher $publisher)
     {
-        //
+        return view('publishers.edit', compact('publisher'));
     }
 
     /**
@@ -52,7 +60,13 @@ class PublisherController extends Controller
      */
     public function update(Request $request, Publisher $publisher)
     {
-        //
+        $request->validate([
+            'penerbit' => 'required',
+        ]);
+
+        $publisher->update($request->all());
+
+        return redirect()->route('publishers.index')->with('success', 'Berhasil Update !');
     }
 
     /**
@@ -60,6 +74,8 @@ class PublisherController extends Controller
      */
     public function destroy(Publisher $publisher)
     {
-        //
+        $publisher->delete();
+
+        return redirect()->route('publishers.index')->with('success', 'Berhasil Hapus !');
     }
 }

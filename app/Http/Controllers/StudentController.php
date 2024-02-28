@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rayon;
 use App\Models\Student;
+use App\Models\StudentGroup;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -12,7 +14,9 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //
+        $students = Student::latest()->paginate(5);
+
+        return view('students.index', compact('students'))->with('i', (request('page', 1) - 1) * 5);
     }
 
     /**
@@ -20,7 +24,10 @@ class StudentController extends Controller
      */
     public function create()
     {
-        //
+        $rayons = Rayon::all();
+        $studentGroups = StudentGroup::all();
+
+        return view('students.create', compact('rayons', 'studentGroups', $rayons, $studentGroups));
     }
 
     /**
@@ -28,7 +35,17 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nis' => 'required',
+            'nama' => 'required',
+            'rombel' => 'required',
+            'rayon' => 'required',
+        ]);
+
+        Student::create($request->all());
+
+        return redirect()->route('students.index')
+            ->with('success', 'Berhasil Menyimpan!');
     }
 
     /**
@@ -44,7 +61,10 @@ class StudentController extends Controller
      */
     public function edit(Student $student)
     {
-        //
+        $rayons = Rayon::all();
+        $studentGroups = StudentGroup::all();
+
+        return view('students.edit', compact('student', 'rayons', 'studentGroups'));
     }
 
     /**
@@ -52,7 +72,16 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+        $request->validate([
+            'nis' => 'required',
+            'nama' => 'required',
+            'rombel' => 'required',
+            'rayon' => 'required',
+        ]);
+            
+        $student->update($request->all());
+    
+        return redirect()->route('students.index')->with('success','Berhasil Update !');
     }
 
     /**
@@ -60,6 +89,8 @@ class StudentController extends Controller
      */
     public function destroy(Student $student)
     {
-        //
+        $student->delete();
+     
+        return redirect()->route('students.index')->with('success','Berhasil Hapus !');
     }
 }
