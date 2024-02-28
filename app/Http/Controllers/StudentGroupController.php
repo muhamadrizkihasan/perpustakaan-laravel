@@ -43,8 +43,7 @@ class StudentGroupController extends Controller
 
         StudentGroup::create($request->all());
 
-        return redirect()->route('studentGroups.index')
-            ->with('success', 'Berhasil Menyimpan !');
+        return redirect()->route('studentGroups.index')->with('success', 'Berhasil Menyimpan !');
     }
 
     /**
@@ -84,8 +83,7 @@ class StudentGroupController extends Controller
 
         $studentGroup->update($request->all());
 
-        return redirect()->route('studentGroups.index')
-            ->with('success', 'Berhasil Update !');
+        return redirect()->route('studentGroups.index')->with('success', 'Berhasil Update !');
     }
 
     /**
@@ -98,7 +96,6 @@ class StudentGroupController extends Controller
     {
         $studentGroup->delete();
 
-        return redirect()->route('studentGroups.index')
-            ->with('success', 'Berhasil Hapus !');
+        return redirect()->route('studentGroups.index')->with('success', 'Berhasil Hapus !');
     }
 }

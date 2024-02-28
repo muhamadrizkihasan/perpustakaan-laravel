@@ -27,7 +27,7 @@ class StudentController extends Controller
         $rayons = Rayon::all();
         $studentGroups = StudentGroup::all();
 
-        return view('students.create', compact('rayons', 'studentGroups', $rayons, $studentGroups));
+        return view('students.create', compact('rayons', 'studentGroups'));
     }
 
     /**
@@ -44,8 +44,7 @@ class StudentController extends Controller
 
         Student::create($request->all());
 
-        return redirect()->route('students.index')
-            ->with('success', 'Berhasil Menyimpan!');
+        return redirect()->route('students.index')->with('success', 'Berhasil Menyimpan!');
     }
 
     /**
